@@ -1,0 +1,13 @@
+.header__icon {
+  display: none;
+}
+
+@media screen and (max-width: 450px) {
+  .header__icon {
+    display: block;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    padding: 0;
+  }
+}

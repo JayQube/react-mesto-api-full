@@ -1,0 +1,7 @@
+.btn-decoration {
+  transition: opacity .2s ease-in-out;
+}
+
+.btn-decoration:hover {
+  opacity: .6;
+}

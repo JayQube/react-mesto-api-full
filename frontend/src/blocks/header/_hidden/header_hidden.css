@@ -1,0 +1,13 @@
+@media screen and (min-width: 451px) {
+  .header_hidden {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .header_hidden {
+    justify-content: center;
+    padding: 40px 0 0;
+    min-height: 101px;
+  }
+}

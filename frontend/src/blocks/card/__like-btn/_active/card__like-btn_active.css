@@ -1,0 +1,3 @@
+.card__like-btn_active {
+  background: url(../../../../images/svg/like_active.svg) center / contain no-repeat;
+}

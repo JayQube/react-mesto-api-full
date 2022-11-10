@@ -1,0 +1,9 @@
+.form_theme_dark {
+  height: calc(100vh - 119px - 85px);
+}
+
+@media screen and (max-width: 767px) {
+  .form_theme_dark {
+    height: calc(100vh - 84px - 80px);
+  }  
+}

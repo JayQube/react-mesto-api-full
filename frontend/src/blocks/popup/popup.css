@@ -1,0 +1,19 @@
+.popup {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .4s, visibility .4s ease-in-out;
+  position: relative;
+}
+
+.popup::before {
+  display: block;
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  opacity: 0.5;
+  cursor: pointer;
+}

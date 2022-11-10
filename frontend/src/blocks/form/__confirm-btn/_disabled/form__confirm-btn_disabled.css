@@ -1,0 +1,11 @@
+.form__confirm-btn_disabled {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  opacity: .2;
+  cursor: default;
+}
+
+.form__confirm-btn_disabled:hover {
+  opacity: .2;
+}
