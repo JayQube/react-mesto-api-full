@@ -19,6 +19,9 @@
 @import url(./blocks/header/__user-email/header__user-email.css);
 @import url(./blocks/header/__user-email/_hidden/header__user-email_hidden.css);
 
+/*Блок main*/
+@import url(./blocks/main/main.css);
+
 /*Блок profile*/
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/profile/__avatar-container/profile__avatar-container.css);
