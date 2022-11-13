@@ -1,10 +1,11 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'http://localhost:3001';
 
 const checkRequest = (res) => {
   if (res.ok) {
     return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
+  } else {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  } 
 }
 
 export const register = (data) => {

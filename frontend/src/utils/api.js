@@ -11,28 +11,37 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getInitialInformation() {
-    return Promise.all([this.getUserInfo(), this.getUsersCards()]);
+  getInitialInformation(jwt) {
+    return Promise.all([this.getUserInfo(jwt), this.getUsersCards(jwt)]);
   }
 
-  getUserInfo() {
+  getUserInfo(jwt) {
     return fetch(`${this._host}/users/me`, {
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
     })
     .then(this._checkRequest);
   }
 
-  getUsersCards() {
+  getUsersCards(jwt) {
     return fetch(`${this._host}/cards`, {
-      headers: this._headers
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
     })
     .then(this._checkRequest);
   }
 
-  setUserInfo(inputValues) {
+  setUserInfo(inputValues, jwt) {
     return fetch(`${this._host}/users/me`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
       body: JSON.stringify({
         name: inputValues.name,
         about: inputValues.about
@@ -41,10 +50,13 @@ class Api {
     .then(this._checkRequest);
   }
 
-  setUserAvatar(inputValue) {
+  setUserAvatar(inputValue, jwt) {
     return fetch(`${this._host}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
       body: JSON.stringify({
         avatar: inputValue.avatar
       })
@@ -52,10 +64,13 @@ class Api {
     .then(this._checkRequest);
   }
 
-  addCard(inputValues) {
+  addCard(inputValues, jwt) {
     return fetch(`${this._host}/cards`, {
       method: 'POST',
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
       body: JSON.stringify({
         name: inputValues.title,
         link: inputValues.link
@@ -64,43 +79,53 @@ class Api {
     .then(this._checkRequest);
   }
 
-  changeLikeCardStatus(id, isLiked) {
+  changeLikeCardStatus(id, isLiked, jwt) {
     if(isLiked) {
-      return this.unlikeCard(id);
+      return this.unlikeCard(id, jwt);
+    } else {
+      return this.likeCard(id, jwt);
     }
-    return this.likeCard(id);
   }
 
-  likeCard(id) {
+  likeCard(id, jwt) {
     return fetch(`${this._host}/cards/${id}/likes`, {
       method: 'PUT',
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
     })
     .then(this._checkRequest);
   }
 
-  unlikeCard(id) {
+  unlikeCard(id, jwt) {
     return fetch(`${this._host}/cards/${id}/likes`, {
       method: 'DELETE',
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
     })
     .then(this._checkRequest);
   }
 
-  deleteCard(id) {
+  deleteCard(id, jwt) {
     return fetch(`${this._host}/cards/${id}`, {
       method: 'DELETE',
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        'Authorization': `Bearer ${jwt}`
+      },
     })
     .then(this._checkRequest);
   }
 }
 
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-47',
+  baseUrl: 'http://localhost:3001',
   headers: {
-    authorization: '27812169-906a-4979-a2e1-91654db30e03',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    //'Authorization': `Bearer ${localStorage.getItem('jwt')}`
   }
 });
 

@@ -32,6 +32,7 @@ function App() {
   const [isRegistrationAccepted, setIsRegistrationAccepted] = React.useState(false);
   const [isHeaderHiddenOpen, setIsHeaderHiddenOpen] = React.useState(false);
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [jwt, setJwt] = React.useState('');
   const [userEmail, setUserEmail] = React.useState('');
   const [renderLoading, setRenderLoading] = React.useState(false);
 
@@ -68,10 +69,9 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, isLiked)
+      .changeLikeCardStatus(card._id, isLiked, jwt)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -84,7 +84,7 @@ function App() {
 
   function handleCardDelete(card) {
     api
-      .deleteCard(card._id)
+      .deleteCard(card._id, jwt)
       .then(() => {
         setCards((state) => state.filter((item) => item._id !== card._id));
       })
@@ -104,7 +104,7 @@ function App() {
   function handleUpdateUser(inputValues) {
     setRenderLoading(true);
     api
-      .setUserInfo(inputValues)
+      .setUserInfo(inputValues, jwt)
       .then((info) => {
         setCurrentUser(info);
       })
@@ -122,7 +122,7 @@ function App() {
   function handleUpdateAvatar(inputValues) {
     setRenderLoading(true);
     api
-      .setUserAvatar(inputValues)
+      .setUserAvatar(inputValues, jwt)
       .then((info) => {
         setCurrentUser(info);
       })
@@ -140,7 +140,7 @@ function App() {
   function handleAddPlaceSubmit(inputValues) {
     setRenderLoading(true);
     api
-      .addCard(inputValues)
+      .addCard(inputValues, jwt)
       .then((newCard) => {
         setCards([newCard, ...cards]);
       })
@@ -188,8 +188,11 @@ function App() {
   }, [isOpen])
 
   React.useEffect(() => {
-    api
-      .getInitialInformation()
+    if(loggedIn) {
+      const jwt = localStorage.getItem('jwt');
+      setJwt(jwt);
+      api
+      .getInitialInformation(jwt)
       .then(([userData, cardsData]) => {
         setCurrentUser(userData);
         setCards(cardsData);
@@ -197,7 +200,10 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+    } else {
+      return;
+    }
+  }, [loggedIn]);
 
   function handleRegistration(data) {
     auth.register(data)
@@ -218,6 +224,7 @@ function App() {
 
   function handleLogOut() {
     localStorage.removeItem('jwt');
+    setJwt('');
     setLoggedIn(false);
     setIsHeaderHiddenOpen(false);
     history.push('sign-in');
@@ -230,7 +237,7 @@ function App() {
       auth.checkToken(jwt)
         .then((data) => {
           setLoggedIn(true);
-          setUserEmail(data.data.email);
+          setUserEmail(data.email);
           history.push('/');
         })
         .catch(err => console.log(err))
@@ -242,6 +249,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           localStorage.setItem('jwt', data.token);
+          setJwt(data.token);
           tokenCheck();
         }
       })
