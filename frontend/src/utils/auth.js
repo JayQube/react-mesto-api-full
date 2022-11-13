@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3001';
+export const BASE_URL = 'https://api.shebyakin.students.nomoredomains.icu';
 
 const checkRequest = (res) => {
   if (res.ok) {

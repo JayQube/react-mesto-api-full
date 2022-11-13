@@ -122,7 +122,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'http://localhost:3001',
+  baseUrl: 'https://api.shebyakin.students.nomoredomains.icu',
   headers: {
     'Content-Type': 'application/json',
     //'Authorization': `Bearer ${localStorage.getItem('jwt')}`
